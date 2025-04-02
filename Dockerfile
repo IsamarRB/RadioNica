@@ -1,26 +1,30 @@
-# Usa una imagen base con OpenJDK
-FROM openjdk:17-jdk-slim
+# Usa una imagen base con Maven para construir el archivo .war
+FROM maven:3.8.5-openjdk-17 AS builder
 
-# Establece el directorio de trabajo dentro del contenedor
+# Establece el directorio de trabajo para la construcción
 WORKDIR /app
 
-# Copia el archivo de configuración de Maven (si usas Maven)
+# Copia los archivos necesarios para la construcción
 COPY pom.xml .
+RUN mvn dependency:resolve
 
-# Descarga las dependencias del proyecto
-RUN apt-get update && apt-get install -y maven && mvn dependency:resolve
+# Copia el resto de los archivos del proyecto
+COPY . .
 
-# Copia el resto de los archivos del proyecto al contenedor
-COPY src ./src
-
-# Compila el proyecto
+# Construye el archivo .war
 RUN mvn package
 
-# Define el puerto en el que la aplicación se ejecutará
-ENV PORT=8080
+# Usa una imagen base de Tomcat para ejecutar el archivo .war
+FROM tomcat:9.0
 
-# Expone el puerto para que esté accesible desde fuera del contenedor
+# Configura el directorio de trabajo en Tomcat
+WORKDIR /usr/local/tomcat/webapps
+
+# Copia el archivo .war generado por Maven al directorio de despliegue de Tomcat
+COPY --from=builder /app/target/nombre-del-archivo.war ROOT.war
+
+# Expone el puerto de Tomcat
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-CMD ["java", "-jar", "target/nombre-del-archivo.jar"]
+# Inicia Tomcat
+CMD ["catalina.sh", "run"]
