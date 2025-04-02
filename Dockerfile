@@ -1,11 +1,26 @@
-# Usar la imagen oficial de Tomcat 9
-FROM tomcat:9.0
+# Usa una imagen base con OpenJDK
+FROM openjdk:17-jdk-slim
 
-# Copiar el archivo WAR generado al directorio webapps de Tomcat
-COPY target/tu-aplicacion.war /usr/local/tomcat/webapps/
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
 
-# Exponer el puerto 8080 para que Render pueda acceder a la app
+# Copia el archivo de configuración de Maven (si usas Maven)
+COPY pom.xml .
+
+# Descarga las dependencias del proyecto
+RUN apt-get update && apt-get install -y maven && mvn dependency:resolve
+
+# Copia el resto de los archivos del proyecto al contenedor
+COPY src ./src
+
+# Compila el proyecto
+RUN mvn package
+
+# Define el puerto en el que la aplicación se ejecutará
+ENV PORT=8080
+
+# Expone el puerto para que esté accesible desde fuera del contenedor
 EXPOSE 8080
 
-# Iniciar Tomcat cuando el contenedor se ejecute
-CMD ["catalina.sh", "run"]
+# Comando para ejecutar la aplicación
+CMD ["java", "-jar", "target/nombre-del-archivo.jar"]
