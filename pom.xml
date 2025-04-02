@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.radionica</groupId>
-    <artifactId>evaluacion-javaee</artifactId>
+    <artifactId>radionica</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
