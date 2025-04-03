@@ -1,6 +1,10 @@
 package com.radionica.controller;
 
 import com.radionica.model.Cantante;
+import com.radionica.service.CantanteService;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cantantes")
