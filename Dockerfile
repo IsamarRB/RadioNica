@@ -21,7 +21,7 @@ FROM tomcat:9.0
 WORKDIR /usr/local/tomcat/webapps
 
 # Copia el archivo .war generado por Maven al directorio de despliegue de Tomcat
-COPY --from=builder /app/target/radionica.war ROOT.war
+COPY --from=builder /app/target/radionica-1.0-SNAPSHOT.war ROOT.war
 
 # Expone el puerto de Tomcat
 EXPOSE 8080
