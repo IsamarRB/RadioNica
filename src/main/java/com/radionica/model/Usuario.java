@@ -19,6 +19,9 @@ public class Usuario {
     @Column(nullable = false)
     private String rol; // ADMIN, PROFESOR, ESTUDIANTE
 
+    @Column(nullable = false)
+    private String correo;
+
     // Constructor vacío
     public Usuario() {}
 
@@ -27,6 +30,7 @@ public class Usuario {
         this.nombre = nombre;
         this.contraseña = contraseña;
         this.rol = rol;
+        this.correo = correo;
     }
 
     // Getters y Setters
@@ -41,4 +45,7 @@ public class Usuario {
 
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
+
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
 }
